@@ -9,6 +9,7 @@ PhpConsole\Helper::register(); // required to register PC class in global namesp
 
 $app = new \Slim\Slim();
 
+//handle temp requests
 $app->get('/temperatures', function () {
 
 	$csvFile = 'api/data/current_temp';
@@ -33,7 +34,9 @@ $app->get('/temperatures', function () {
 
 	//get sections from ini file
 	$enabledChannels = $ini_array['ch_show'];
-	$channelNames = $ini_array['ch_name'];
+	$channelNames = array_values($ini_array['ch_name']);
+	$channelMin = array_values($ini_array['temp_min']);
+	$channelMax = array_values($ini_array['temp_max']);
 
 	$temperatureResponse = new TempRequest();
 	
@@ -47,10 +50,10 @@ $app->get('/temperatures', function () {
 			$sensor = new Sensor();
 
 			$sensor->setChannel($key);
-			$sensor->setName('Kanal 0');
+			$sensor->setName($channelNames[$i]);
 			$sensor->setTemperature($temp[$i]);
-			$sensor->setTempMax(0);
-			$sensor->setTempMin(200);
+			$sensor->setTempMax($channelMin[0]);
+			$sensor->setTempMin($channelMax[0]);
 
 			$temperatureResponse->add($key, $sensor);
 		}
@@ -62,6 +65,12 @@ $app->get('/temperatures', function () {
 
 	header('Content-type: application/json');
     echo "$json";
+});
+
+
+//handle sensor requests
+$app->get('/sensor/:id', function($id){
+	echo "$id";
 });
 
 $app->run();
