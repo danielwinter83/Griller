@@ -1,0 +1,15 @@
+{
+  "timeStamp": "17.05.14 10:03:58",
+  "logfile": "20140514_211310_TEMPLOG",
+  "sensors": [
+    {
+      "channel": 0,
+      "name": "Kanal 0",
+      "currentTemperature": 20.2,
+      "settings": {
+        "tempMin": 0,
+        "tempMax": 200
+      }
+    }
+  ]
+}
