@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Slim' => array($vendorDir . '/slim/slim'),
+    'PhpConsole' => array($vendorDir . '/php-console/php-console/src'),
 );
