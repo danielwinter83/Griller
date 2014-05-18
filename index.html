@@ -55,14 +55,6 @@
         <div class="col-sm-9 col-sm-offset-2 col-md-10 col-md-offset-1 main">
           <h1 class="page-header">Dashboard</h1>
           <div id="temperatures" class="row placeholders">
-          <div class="col-xs-6 col-sm-3 placeholder">
-          <div class="panel panel-default">
-              <div class="panel-body">
-                <h2>Demo</h2>
-                <span class="text-muted">Test</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -75,8 +67,9 @@
     <script src="./index_files/docs.min.js"></script>
     <script src="/js/underscore.js"></script>
     <script src="./js/backbone.js"></script>
+    <script src="./js/handlebars-v1.3.0.js"></script>
     <script src="./js/app.js"></script>
-    
+    <script src="./js/Chart.min.js"></script>
     <script>
         function startPolling(){
             setInterval(getTemperatures(),2000);
@@ -116,4 +109,14 @@
         }
     </script>
 
-</body></html>
+
+    <script type="text/x-handlebars-template" id="sensor-list-template">
+        {{#each []}}
+            <div id='{{this.channel}}' class='col-xs-6 col-sm-3 placeholder'>
+                <h2><{{this.temperature}}</h2>
+                <span class="text-muted">{{this.name}}</span>
+            </div>
+        {{/each}}
+    </script>    
+</body>
+</html>
