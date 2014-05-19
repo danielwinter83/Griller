@@ -26,8 +26,7 @@
     <![endif]-->
 </style><style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style></head>
 
-  <body onload="startPolling()">
-
+  <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -54,8 +53,8 @@
       <div class="row">
         <div class="col-sm-9 col-sm-offset-2 col-md-10 col-md-offset-1 main">
           <h1 class="page-header">Dashboard</h1>
-          <div id="temperatures" class="row placeholders">
-        </div>
+          <div id="timestamp" class="row"></div>
+          <div id="temperatures" class="row placeholders"></div>
       </div>
     </div>
 
@@ -83,37 +82,11 @@
               context: document.body
             }).done(renderTemperatures);
         }
-
-        function renderTemperatures(data){
-
-            var temperatures = data[data.length - 1];
-
-            $.each(temperatures,function(i, val){
-                $.each(val,function(j, key){ 
-                    if(key <= 900){
-                        var temp = $("<h2></h2>").text(key+" °C");
-                        var channel = $("<span></span>").addClass("text-muted").text("Kanal xy");
-                        var lblTemp = $("<div></div>").addClass( "col-xs-6 col-sm-3 placeholder" ).append(temp);
-                        lblTemp.append(channel);
-                        $("#temperatures").append(lblTemp)
-                    }
-                });
-                
-            });
-
-            jQuery.each(data, function(i, val) {
-                jQuery.each(val, function(i, temp){
-                    // alert(temp.ch_name);
-                });
-            });
-        }
     </script>
-
-
     <script type="text/x-handlebars-template" id="sensor-list-template">
         {{#each []}}
             <div id='{{this.channel}}' class='col-xs-6 col-sm-3 placeholder'>
-                <h2><{{this.temperature}}</h2>
+                <h2>{{this.temperature}}</h2>
                 <span class="text-muted">{{this.name}}</span>
             </div>
         {{/each}}

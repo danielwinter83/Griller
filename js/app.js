@@ -17,36 +17,68 @@ TemperatureRequest = Backbone.Model.extend({
     defaults: {
         timestamp: '',
         logfile: '',
-        sensors: new SensorList()
+        sensorList: new SensorList()
+    },
+    parse: function(response) {
+        response.sensorList = new SensorList(response.sensors);
+
+        return response;
+    },
+
+    success: function(response) {
+        console.log('success');
+
     }
 });
 
 TemperatureView = Backbone.View.extend({
 
+    el: '#temperatures',
+
     initialize: function() {
-        console.log(this.collection);
-        // this.collection.bind("reset", this.render, this);
+        this.listenTo(this.model, 'reset', this.render);
+        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'add', this.render);
+        this.model.fetch;
     },
 
     render: function(eventName) {
+        var list = this.model.get('sensorList');
+        console.log(list.toJSON());
         var source = $('#sensor-list-template').html();
         var template = Handlebars.compile(source);
-        var html = this.template(this.collection.toJSON());
+        var html = template(list.toJSON());
 
         this.$el.html(html);
-    } 
+        this.renderTimestamp();
+    },
+    renderTimestamp: function() {
+        var tsText = $("<p></p>").addClass("text-right");
+        var timestamp = $("<div></div>").addClass("col-sm-4 col-sm-offset-8").append(tsText);
+        tsText.text(this.model.get('timestamp'));
+        $('#timestamp').append(timestamp);
+    }
 });
 
 
 $(document).ready(function() {
     var temps = new TemperatureRequest();
-    temps.fetch({
-        success: function() {
-            var sensorsCollection = temps.get("sensors");
-
-            var tempView = new TemperatureView({
-                collection: sensorsCollection
-            });
-        }
+    var tempsView = new TemperatureView({
+        model: temps
     });
+
+    temps.fetch();
+    // setInterval(function() {
+    //     temps.fetch();
+    // }, 30000);
+
+    // temps.fetch({
+    //     success: function() {
+    //         console.log('success');
+    //         var tsText = $("<p></p>").addClass("text-right");
+    //         var timestamp = $("<div></div>").addClass("col-sm-4 col-sm-offset-8").append(tsText);
+    //         tsText.text(temps.get('timestamp'));
+    //         $('#timestamp').append(timestamp);
+    //     }
+    // });
 });
